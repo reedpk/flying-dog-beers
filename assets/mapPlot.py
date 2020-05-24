@@ -28,30 +28,10 @@ tab_1_layout = html.Div([
 
                     dbc.Col(html.Div([
                         html.H6('Curling Club Map'),#, style={'textAlign': 'center'}),
-                        html.Iframe(id='map',srcDoc=open('assets/CurlClubMap.html').read(),width='50%', height='600')
+                        html.Iframe(id='map',srcDoc=open('assets/FullCurlmap.html').read())#,width='50%', height='600')
 
                     ]), width={"size": 6, "offset": 3}),
                 ])]),
 
-                dbc.Row(html.Div([
-                    html.Div([
-                        html.H6('Race - Age Disrtibution', style={'textAlign': 'center'}),
-                        dcc.Graph(
-                                id='example-graph-6',
-                                figure={
-                                'data': [
-                                        #go.Scatter(
-                                                #x=df['Latitude'],
-                                                #y=df['Latitude'],
-                               #)
-                                ],
-                                'layout': {
-                                    'title': 'Graph-6'
-                                }
-                            }
-                        )
-                    ])
-                ])
-                )
             ]
         )
