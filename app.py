@@ -1,63 +1,49 @@
 import dash
-import dash_core_components as dcc
+from dash.dependencies import Input, Output
 import dash_html_components as html
+import dash_core_components as dcc
+from assets import mapPlot, patient_med_readmit
+
+import pandas as pd
+import plotly.figure_factory as ff
+import numpy as np
+
 import plotly.graph_objs as go
 
-########### Define your variables
-beers=['Chesapeake Stout', 'Snake Dog IPA', 'Imperial Porter', 'Double Dog IPA']
-ibu_values=[35, 60, 85, 75]
-abv_values=[5.4, 7.1, 9.2, 4.3]
-color1='lightblue'
-color2='darkgreen'
-mytitle='Beer Comparison'
-tabtitle='beer!'
-myheading='Flying Dog Beers'
-label1='IBU'
-label2='ABV'
-githublink='https://github.com/austinlasseter/flying-dog-beers'
-sourceurl='https://www.flyingdog.com/beers/'
-
-########### Set up the chart
-bitterness = go.Bar(
-    x=beers,
-    y=ibu_values,
-    name=label1,
-    marker={'color':color1}
-)
-alcohol = go.Bar(
-    x=beers,
-    y=abv_values,
-    name=label2,
-    marker={'color':color2}
-)
-
-beer_data = [bitterness, alcohol]
-beer_layout = go.Layout(
-    barmode='group',
-    title = mytitle
-)
-
-beer_fig = go.Figure(data=beer_data, layout=beer_layout)
-
-
-########### Initiate the app
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-server = app.server
-app.title=tabtitle
 
-########### Set up the layout
-app.layout = html.Div(children=[
-    html.H1(myheading),
-    dcc.Graph(
-        id='flyingdog',
-        figure=beer_fig
-    ),
-    html.A('Code on Github', href=githublink),
-    html.Br(),
-    html.A('Data Source', href=sourceurl),
-    ]
-)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
+server = app2.server
+
+colors = {"background": "#495973", "background_div": "white", 'text': '#009999'}
+
+app.config['suppress_callback_exceptions']= True
+
+
+app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
+    html.H1('Curling Club Dashboard', style={
+            'textAlign': 'center',
+            'color': colors['text']
+        }),
+
+      dcc.Tabs(id="tabs", className="row", style={"margin": "2% 3%","height":"10","verticalAlign":"middle"}, value='dem_tab', children=[
+        dcc.Tab(label='Map', value='dem_tab'),
+        dcc.Tab(label='Club List', value='med_tab')
+        # dcc.Tab(label='Re-admissions', value='readmit_tab')
+    ]),
+    html.Div(id='tabs-content')
+])
+
+
+@app.callback(Output('tabs-content', 'children'),
+              [Input('tabs', 'value')])
+
+def render_content(tab):
+    if tab == 'dem_tab':
+        return mapPlot.tab_1_layout
+    elif tab == 'med_tab':
+        return patient_med_readmit.tab_2_layout
 
 if __name__ == '__main__':
     app.run_server()
